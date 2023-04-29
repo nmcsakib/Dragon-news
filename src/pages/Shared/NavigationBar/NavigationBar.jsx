@@ -6,7 +6,11 @@ import { AuthContext } from '../../../providers/AuthProvider';
 
 const NavigationBar = () => {
 
-    const { user } = useContext(AuthContext);
+    const { user, logOut} = useContext(AuthContext);
+    console.log(user?.displayName);
+    const handelLogOut = () => {
+        logOut().then().catch(err => console.log(err))
+    }
 
     return (
         <Container>
@@ -21,11 +25,17 @@ const NavigationBar = () => {
                         </Nav>
                         <Nav>
                             {
-                                user && <FaUserCircle style={{ fontSize: '2rem' }}></FaUserCircle>
+                                !user ?
+                                <FaUserCircle style={{ fontSize: '2rem' }}></FaUserCircle>
+                                
+                            :
+                                <><img  style={{ height: '40px', width: '40px' }} src={user?.photoURL} alt="Profile" />
+                                <p>{user?.displayName}</p></>
+                                
                             }
 
                             {user ?
-                                <Button variant="secondary">Logout</Button> :
+                                <Button onClick={handelLogOut} variant="secondary">Logout</Button> :
                                 <Link to="/login">
                                     <Button variant="secondary">Login</Button>
                                 </Link>
